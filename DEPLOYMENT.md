@@ -24,44 +24,47 @@ the branch into `main` (or just push to main directly:
 app → grant **Read and write** on this repository. That is the single change
 that lets me commit directly in every future session — no more bundles.
 
-## 2 · Supabase (~5 min, no terminal)
+## 2 · Create the database (~2 min, no password needed)
 
-1. [supabase.com](https://supabase.com) → New project → name it `vishweshwara`
-   → region **South Asia (Mumbai)** → set a database password and save it.
-2. Once the project finishes provisioning, press **Connect** (top bar) →
-   **Connection string** → choose **Session pooler**. Copy it, and replace
-   `[YOUR-PASSWORD]` with the password from step 1.
+Supabase generates a database password when the project is created, and if you
+signed up through GitHub you were never shown it. You do not need it.
 
-   > It must be the **Session pooler** on port **5432**. GitHub runners and
-   > Vercel are IPv4-only; Supabase's direct connection is IPv6-only and will
-   > simply time out. The transaction pooler (6543) cannot run migrations.
+1. Supabase → left sidebar → **SQL Editor** → **New query**
+2. Open **`supabase-setup.sql`** from this repository, select all, copy
+3. Paste into the editor → press **Run**
 
-3. Put that string in **two** places, both in the browser:
-
-   **a. GitHub** → your repo → Settings → Secrets and variables → Actions →
-   **New repository secret** → name `DATABASE_URL`, paste the string.
-
-   **b. Vercel** → (after step 3 below) Project → Settings → Environment
-   Variables → `DATABASE_URL`, same string.
-
-4. Create the tables — **no terminal**: GitHub → **Actions** tab → **Database**
-   → **Run workflow** → tick **Also run the seed** (first time only) → Run.
-
-   Two minutes later the run turns green: 22 tables created, the Acharya and a
-   demo student exist. The log prints both passwords — **change them.**
+That creates all 22 tables and loads the curriculum — five paths, sixteen
+stages, thirty-five texts. It contains **no accounts and no passwords**, which
+is why it is safe to keep in a public repository.
 
 ## 3 · Vercel (~5 min)
 
-1. [vercel.com](https://vercel.com) → Add New → Project → Import the GitHub
-   repository. Framework is auto-detected (Next.js). Do not change build
-   settings.
-2. Before the first deploy, add one Environment Variable:
-   - `DATABASE_URL` = the same Session-pooler string
-3. Deploy. You get `https://<project>.vercel.app` in about two minutes.
+1. [vercel.com](https://vercel.com) → Add New → Project → import the GitHub
+   repository. Next.js is detected automatically; change no build settings.
+2. Connect the database — **either** way works:
+   - **Easiest:** Vercel → Integrations → **Supabase** → connect your project.
+     Vercel then sets `POSTGRES_URL` itself and you never handle a password.
+   - **Manual:** add `DATABASE_URL` yourself, using the **Session pooler**
+     string from Supabase → Connect, with the password filled in.
+3. Add one more Environment Variable:
+   - `SETUP_SECRET` — any long phrase you invent. It guards the page that
+     creates your account. You will need it once.
+4. Deploy. You get `https://<project>.vercel.app`.
 
-**Custom domain, when ready:** Vercel → Project → Settings → Domains → add
+## 4 · Create your account (~1 min)
+
+Visit **`https://<your-site>/setup`**, enter your `SETUP_SECRET`, your name,
+email and a password of your choosing.
+
+The page then closes permanently — it refuses to run once an Acharya exists, so
+it cannot create a second privileged account. Your password exists only as a
+hash in your own database; it is never in this repository.
+
+Sign in at `/login`. You are live.
+
+**Custom domain, when ready:** Vercel → Settings → Domains → add
 `vishweshwarasanskrit.com` and follow the DNS instructions at your registrar.
-Do not take the old site down until the new one is live at the domain.
+Do not take the old site down until the new one answers at the domain.
 
 ---
 

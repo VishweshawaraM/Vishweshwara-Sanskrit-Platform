@@ -14,8 +14,14 @@ const schema = z.object({
   // Public
   NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
 
-  // Database — Supabase Postgres
+  // Database — Supabase Postgres.
+  // POSTGRES_URL is what Vercel's Supabase integration injects automatically,
+  // which spares the Acharya from ever copying a database password by hand.
   DATABASE_URL: z.string().min(1).optional(),
+  POSTGRES_URL: z.string().min(1).optional(),
+
+  // Guards the one-time /setup page that creates the Acharya's account.
+  SETUP_SECRET: z.string().min(8).optional(),
 
   // Supabase
   NEXT_PUBLIC_SUPABASE_URL: z.url().optional(),
@@ -50,8 +56,11 @@ export const env = parsed.data;
 
 /** Guards for code paths that genuinely need an integration configured. */
 export function requireDatabaseUrl(): string {
-  if (!env.DATABASE_URL) {
-    throw new Error("DATABASE_URL is not set. Copy .env.example to .env.local.");
+  const url = env.DATABASE_URL ?? env.POSTGRES_URL;
+  if (!url) {
+    throw new Error(
+      "No database URL. Set DATABASE_URL (or let Vercel's Supabase integration set POSTGRES_URL).",
+    );
   }
-  return env.DATABASE_URL;
+  return url;
 }
