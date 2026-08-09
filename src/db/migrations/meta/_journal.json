@@ -8,6 +8,13 @@
       "when": 1786269897084,
       "tag": "0000_white_praxagora",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786273653719,
+      "tag": "0001_chunky_ego",
+      "breakpoints": true
     }
   ]
 }

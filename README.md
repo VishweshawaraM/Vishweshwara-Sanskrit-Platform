@@ -59,3 +59,24 @@ npm run dev
 5. **`/verify/<id>` is a permanent address.** A certificate link issued in 2026 may
    be checked in 2045. It must never break.
 6. **No gamification** — no streaks, badges, or leaderboards, ever.
+
+## Running the full application locally
+
+```bash
+# 1. Postgres (any 15+). Locally:
+#    pg_ctlcluster 16 main start
+#    sudo -u postgres psql -c "CREATE ROLE vishweshwara LOGIN PASSWORD '...' CREATEDB;" \
+#                          -c "CREATE DATABASE vishweshwara OWNER vishweshwara;"
+# 2. Configure
+cp .env.example .env.local     # set DATABASE_URL
+
+# 3. Migrate and seed
+npx drizzle-kit migrate
+npx tsx scripts/seed.ts        # prints demo credentials — change them
+
+# 4. Run
+npm run dev
+```
+
+For Supabase: paste the session-pooler connection string as DATABASE_URL.
+Nothing else changes.

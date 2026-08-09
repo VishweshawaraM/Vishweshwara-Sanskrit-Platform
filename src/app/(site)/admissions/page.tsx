@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { submitApplication } from "@/app/actions/admissions";
 import { Reveal } from "@/components/motion/reveal";
 import { PageHeader } from "@/components/site/page-header";
 import { curriculum } from "@/db/seed/curriculum";
@@ -95,8 +96,7 @@ export default function AdmissionsPage() {
           <Reveal delay={80}>
             <form
               className="border-border bg-surface mt-12 space-y-8 rounded-lg border p-9 shadow-[var(--shadow-raised)]"
-              action="/admissions/thank-you"
-              method="GET"
+              action={submitApplication}
             >
               <div className="grid gap-8 sm:grid-cols-2">
                 <label className="block">
