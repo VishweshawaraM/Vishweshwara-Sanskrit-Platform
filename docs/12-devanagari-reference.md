@@ -110,13 +110,12 @@ his choice:
 |---|---|---|---|---|
 | I | मन्त्रप्रवेशः | Mantrapraveśaḥ | Entry into mantra | 🔷 |
 | II | सूक्ताध्ययनम् | Sūktādhyayanam | Study of the sūktas | 🔷 |
-| III | वैदिकानुष्ठानमन्त्राः | Vaidikānuṣṭhānamantrāḥ | Mantras of Vedic practice | ⚠️ |
+| III | वैदिकानुष्ठानम् | Vaidikānuṣṭhānam | Vedic ritual practice | ✅ |
 | IV | मुख्ययजुर्वेदाध्ययनम् | Mukhyayajurvedādhyayanam | Core Yajurveda study | 🔷 |
 | V | उपनिषदध्ययनम् | Upaniṣadadhyayanam | Study of the Upaniṣads | 🔷 |
 
-⚠️ **QUERY on Stage III.** The source shows the two words uncombined (वैदिक + अनुष्ठानमन्त्राः).
-With sandhi the compound is **वैदिकानुष्ठानमन्त्राः**, which is recommended. Retain
-**वैदिकअनुष्ठानमन्त्राः** only if the separation is deliberate.
+✅ **RULED by the Acharya: वैदिकानुष्ठानम्** — sandhi applied, and the name shortened from the
+source's *वैदिकअनुष्ठानमन्त्राः*.
 
 ### Text and mantra titles
 
