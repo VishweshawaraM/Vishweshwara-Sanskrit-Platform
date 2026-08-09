@@ -93,6 +93,16 @@
   --color-maroon-600: #93303f;
   --color-maroon-100: #f3e4e6;
 
+  /* ---- Ink: the dark ground -------------------------------------------- */
+  /* Used for the hero, the footer, and the portal. NEVER for long-form
+     Sanskrit — light-on-dark blooms and thickens vedic accent marks (D-03). */
+  --color-ink-950: #131211;
+  --color-ink-900: #1a1917;
+  --color-ink-800: #23211e;
+  --color-ink-700: #2f2c28;
+  --color-ink-fg:  #e8e2d6;
+  --color-ink-muted: #a49a89;
+
   /* ---- Accent: gold ----------------------------------------------------- */
   /* Rules, seals, certificates. NEVER a gradient. NEVER a button fill. */
   --color-gold-700: #8a6d22;
@@ -141,62 +151,86 @@
   --spacing-measure: 34rem;      /* ~65 characters of Latin */
   --spacing-measure-wide: 48rem;
 
+  /* ---- Easing ------------------------------------------------------------
+     Built-in CSS easings are too weak. These are the only curves permitted.
+     NEVER ease-in on UI — it delays the moment the user is watching most.
+     ---------------------------------------------------------------------- */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Soft, realistic shadows — light from above, two layers: a tight contact
+     shadow and a wide ambient one. A single blurred box-shadow reads as fake. */
+  --shadow-raised:
+    0 1px 2px rgb(31 30 28 / 0.05),
+    0 4px 12px -2px rgb(31 30 28 / 0.06);
+  --shadow-lifted:
+    0 1px 2px rgb(31 30 28 / 0.06),
+    0 8px 24px -4px rgb(31 30 28 / 0.08),
+    0 24px 48px -12px rgb(31 30 28 / 0.06);
+
   --radius-sm: 2px;
   --radius-md: 3px;              /* restrained. Not "rounded-everything". */
   --radius-lg: 4px;
 }
 
 /* ==========================================================================
-   Base
+   Base — inside @layer base so Tailwind utilities always win.
+
+   Unlayered CSS beats every layered rule, so an unlayered `a { color }` would
+   silently override `text-ink-muted` on every link. Layering is not cosmetic
+   here; it is what makes the utility classes mean anything.
    ========================================================================== */
 
-:root {
-  color-scheme: light;
-}
+@layer base {
+  :root {
+    color-scheme: light;
+  }
 
-* {
-  border-color: var(--color-border);
-}
+  * {
+    border-color: var(--color-border);
+  }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  text-rendering: optimizeLegibility;
-}
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
-  font-family: var(--font-serif);
-  font-size: var(--text-base);
-  line-height: 1.65;
-  font-synthesis-weight: none;
-}
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-serif);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    font-synthesis-weight: none;
+  }
 
-h1, h2, h3, h4, h5, h6 {
-  color: var(--color-heading);
-  line-height: 1.2;
-  text-wrap: balance;
-  font-weight: 600;
-}
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-heading);
+    line-height: 1.2;
+    text-wrap: balance;
+    font-weight: 600;
+  }
 
-p {
-  text-wrap: pretty;
-}
+  p {
+    text-wrap: pretty;
+  }
 
-a {
-  color: var(--color-primary);
-  text-underline-offset: 0.2em;
-  text-decoration-thickness: 1px;
-}
+  a {
+    color: var(--color-primary);
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
 
-::selection {
-  background-color: var(--color-gold-200);
-  color: var(--color-charcoal-900);
+  ::selection {
+    background-color: var(--color-gold-200);
+    color: var(--color-charcoal-900);
+  }
 }
 
 /* ==========================================================================
@@ -205,47 +239,133 @@ a {
    BOTH above (shirorekha, udatta) and below (anudatta) the glyph. D-05.
    ========================================================================== */
 
-.deva,
-[lang="sa"] {
-  font-family: var(--font-devanagari);
-  line-height: 1.9;
-  font-feature-settings: "kern" 1, "liga" 1;
-}
+@layer components {
+  .deva,
+  [lang="sa"] {
+    font-family: var(--font-devanagari);
+    line-height: 1.9;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
 
-/* Vedic accent marks must never be clipped by a tight line box. */
-.deva-accented {
-  line-height: 2.05;
-  padding-block: 0.15em;
-}
+  /* Vedic accent marks must never be clipped by a tight line box. */
+  .deva-accented {
+    line-height: 2.05;
+    padding-block: 0.15em;
+  }
 
-/* IAST diacritics in Latin text — ā ī ū ṛ ṝ ḷ ṅ ñ ṭ ḍ ṇ ś ṣ ṁ ḥ */
-.iast {
-  font-family: var(--font-serif);
-  font-variant-ligatures: none;
-}
+  /* IAST diacritics in Latin text — ā ī ū ṛ ṝ ḷ ṅ ñ ṭ ḍ ṇ ś ṣ ṁ ḥ */
+  .iast {
+    font-family: var(--font-serif);
+    font-variant-ligatures: none;
+  }
 
-/* ==========================================================================
-   Motion — only where it explains something (D-05).
-   ========================================================================== */
+  /* ---- Ink sections — the hero and the footer -------------------------- */
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  .ink {
+    background-color: var(--color-ink-950);
+    color: var(--color-ink-fg);
+  }
+
+  .ink h1,
+  .ink h2,
+  .ink h3 {
+    color: var(--color-ink-fg);
+  }
+
+  /* The single gold rule dividing ink from parchment. A decisive edge, not a
+     gradient fade — institutions have edges. */
+  .rule-gold {
+    height: 1px;
+    background-color: var(--color-gold-600);
+    opacity: 0.55;
+  }
+
+  /* ---- Pressable / lift ------------------------------------------------ */
+
+  .pressable {
+    transition: transform 160ms var(--ease-out-strong);
+  }
+
+  .pressable:active {
+    transform: scale(0.97);
+  }
+
+  /* Hover is gated: touch devices fire hover on tap. */
+  @media (hover: hover) and (pointer: fine) {
+    .lift {
+      transition:
+        transform 240ms var(--ease-out-strong),
+        box-shadow 240ms var(--ease-out-strong);
+    }
+
+    .lift:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lifted);
+    }
   }
 }
 
 /* ==========================================================================
-   Print — certificates and reading. Parchment becomes paper.
+   Motion
+   Entrances are CSS, not JavaScript: they run off the main thread and survive
+   a busy browser.
+
+   No-JS safety: content is visible by default. The hidden state applies only
+   once the inline bootstrap sets [data-js] on <html>, so a reader without
+   JavaScript sees the full page — never a blank one.
    ========================================================================== */
 
-@media print {
-  body {
-    background: #fff;
-    color: #000;
+@layer components {
+  [data-js] [data-reveal]:not([data-visible]) {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 520ms var(--ease-out-strong),
+      transform 520ms var(--ease-out-strong);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  /* Clip-path wipe — for the seal, rules, and images. One paint, fully
+     compositable, and it reads as ink meeting paper.
+
+     CRITICAL: the clip lives on an INNER element. Clipping the observed
+     element collapses its intersection rectangle to zero, so the observer
+     could never fire and the content would stay hidden forever. */
+  .draw-inner {
+    display: block;
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1100ms var(--ease-in-out-strong);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-js] [data-draw]:not([data-visible]) .draw-inner {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  /* Reduced motion means fewer and gentler animations, not none. Opacity aids
+     comprehension and stays; movement goes. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    .draw-inner {
+      transition-duration: 200ms;
+      transition-property: opacity;
+      transform: none !important;
+      clip-path: none !important;
+    }
+
+    [data-js] [data-reveal]:not([data-visible]) {
+      transform: none;
+      opacity: 0;
+    }
+
+    [data-js] [data-draw]:not([data-visible]) .draw-inner {
+      clip-path: none;
+      opacity: 0;
+    }
   }
 }

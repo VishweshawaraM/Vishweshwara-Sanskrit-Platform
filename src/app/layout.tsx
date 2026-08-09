@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
+import { JsBootstrap } from "@/components/motion/js-bootstrap";
+
 import "./globals.css";
 
 /**
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#faf7f0",
+  themeColor: "#131211",
   colorScheme: "light",
 };
 
@@ -34,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <JsBootstrap />
         {/* Preloaded because both faces are used above the fold on every page. */}
         <link
           rel="preload"
