@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Vishweshwara Sanskrit — design tokens
+   Ratified in docs/02-website-decisions.md (D-03, D-05).
+
+   THIS IS THE ONLY PLACE COLOUR IS DEFINED.
+   No hex value may appear in a component. If you need a colour that is not
+   here, the palette needs a decision, not an exception.
+   ========================================================================== */
+
+@theme {
+  /* ---- Ground: warm ivory / parchment ---------------------------------- */
+  --color-parchment-50:  #fdfbf6;
+  --color-parchment-100: #faf7f0;  /* page ground */
+  --color-parchment-200: #f4efe3;  /* raised surface */
+  --color-parchment-300: #e9e1d0;  /* borders, rules */
+  --color-parchment-400: #d8ccb4;
+
+  /* ---- Text: deep charcoal --------------------------------------------- */
+  --color-charcoal-900: #1f1e1c;   /* headings */
+  --color-charcoal-800: #2b2a27;   /* body */
+  --color-charcoal-600: #55524c;   /* secondary */
+  --color-charcoal-400: #857f75;   /* muted */
+
+  /* ---- Institutional: maroon ------------------------------------------- */
+  /* Carries both the Oxford/Harvard register and kāṣāya/kumkuma. */
+  --color-maroon-900: #4d141f;
+  --color-maroon-800: #631a28;
+  --color-maroon-700: #7a2231;     /* primary institutional colour */
+  --color-maroon-600: #93303f;
+  --color-maroon-100: #f3e4e6;
+
+  /* ---- Accent: gold ----------------------------------------------------- */
+  /* Rules, seals, certificates. NEVER a gradient. NEVER a button fill. */
+  --color-gold-700: #8a6d22;
+  --color-gold-600: #a8862f;
+  --color-gold-500: #c2a04a;       /* the accent */
+  --color-gold-200: #ecdfb9;
+
+  /* ---- Semantic --------------------------------------------------------- */
+  --color-background: var(--color-parchment-100);
+  --color-surface:    var(--color-parchment-50);
+  --color-raised:     var(--color-parchment-200);
+  --color-border:     var(--color-parchment-300);
+  --color-foreground: var(--color-charcoal-800);
+  --color-heading:    var(--color-charcoal-900);
+  --color-muted:      var(--color-charcoal-600);
+  --color-primary:    var(--color-maroon-700);
+  --color-accent:     var(--color-gold-500);
+
+  --color-success: #2f5d3f;
+  --color-warning: #8a5a1a;
+  --color-danger:  #8a2b23;
+
+  /* ---- Typography -------------------------------------------------------
+     Latin: a face already old, or a rigorous revival (D-05).
+     Devanagari: must carry vedic accents. See docs/12 §8 rule 5.
+     Both are placeholders until licensing is settled — see FONTS.md.
+     ---------------------------------------------------------------------- */
+  --font-serif: "Vishweshwara Serif", "Iowan Old Style", "Palatino Linotype",
+                "Book Antiqua", Palatino, Georgia, serif;
+  --font-devanagari: "Vishweshwara Devanagari", "Noto Serif Devanagari",
+                     "Shobhika", serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* One modular scale, few sizes (D-05). Ratio 1.25. */
+  --text-xs:   0.8rem;
+  --text-sm:   0.9rem;
+  --text-base: 1.0625rem;   /* long-form reading, not 16px */
+  --text-lg:   1.25rem;
+  --text-xl:   1.5625rem;
+  --text-2xl:  1.953rem;
+  --text-3xl:  2.441rem;
+  --text-4xl:  3.052rem;
+
+  /* Margins taken from book typography, not web convention (D-05). */
+  --spacing-measure: 34rem;      /* ~65 characters of Latin */
+  --spacing-measure-wide: 48rem;
+
+  --radius-sm: 2px;
+  --radius-md: 3px;              /* restrained. Not "rounded-everything". */
+  --radius-lg: 4px;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.65;
+  font-synthesis-weight: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  line-height: 1.2;
+  text-wrap: balance;
+  font-weight: 600;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--color-primary);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--color-gold-200);
+  color: var(--color-charcoal-900);
+}
+
+/* ==========================================================================
+   Sanskrit
+   Devanagari needs materially more line height than Latin because accents sit
+   BOTH above (shirorekha, udatta) and below (anudatta) the glyph. D-05.
+   ========================================================================== */
+
+.deva,
+[lang="sa"] {
+  font-family: var(--font-devanagari);
+  line-height: 1.9;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Vedic accent marks must never be clipped by a tight line box. */
+.deva-accented {
+  line-height: 2.05;
+  padding-block: 0.15em;
+}
+
+/* IAST diacritics in Latin text — ā ī ū ṛ ṝ ḷ ṅ ñ ṭ ḍ ṇ ś ṣ ṁ ḥ */
+.iast {
+  font-family: var(--font-serif);
+  font-variant-ligatures: none;
+}
+
+/* ==========================================================================
+   Motion — only where it explains something (D-05).
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Print — certificates and reading. Parchment becomes paper.
+   ========================================================================== */
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+}
