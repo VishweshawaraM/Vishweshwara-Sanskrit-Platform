@@ -41,6 +41,11 @@ jobs:
             *) echo "Non-Supabase host — continuing." ;;
           esac
 
+      - name: Test the connection
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node scripts/db-check.mjs
+
       - name: Apply migrations
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

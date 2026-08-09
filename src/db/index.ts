@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
+import { sslModeFor } from "@/lib/db-url";
 import { requireDatabaseUrl } from "@/lib/env";
 import * as schema from "./schema";
 
@@ -16,7 +17,9 @@ let database: ReturnType<typeof drizzle<typeof schema>> | undefined;
 
 export function db() {
   if (!database) {
-    client = postgres(requireDatabaseUrl(), { prepare: false, max: 1 });
+    const url = requireDatabaseUrl();
+    // prepare:false is required by Supabase's pooler; ssl by every managed host.
+    client = postgres(url, { prepare: false, max: 1, ssl: sslModeFor(url) });
     database = drizzle(client, { schema });
   }
   return database;
