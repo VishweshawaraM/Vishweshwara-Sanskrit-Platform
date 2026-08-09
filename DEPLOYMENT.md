@@ -24,23 +24,31 @@ the branch into `main` (or just push to main directly:
 app → grant **Read and write** on this repository. That is the single change
 that lets me commit directly in every future session — no more bundles.
 
-## 2 · Supabase (~5 min)
+## 2 · Supabase (~5 min, no terminal)
 
-1. [supabase.com](https://supabase.com) → New project → name it
-   `vishweshwara` → region **Mumbai (ap-south-1)** → generate a strong
-   database password and save it.
-2. Project Settings → Database → **Connection string → URI**, and choose the
-   **Session pooler** variant. Copy it.
-3. From your terminal, in the repo:
+1. [supabase.com](https://supabase.com) → New project → name it `vishweshwara`
+   → region **South Asia (Mumbai)** → set a database password and save it.
+2. Once the project finishes provisioning, press **Connect** (top bar) →
+   **Connection string** → choose **Session pooler**. Copy it, and replace
+   `[YOUR-PASSWORD]` with the password from step 1.
 
-```bash
-echo 'DATABASE_URL=<the pooler string you copied>' > .env.local
-npx drizzle-kit migrate        # creates all 22 tables
-npx tsx scripts/seed.ts        # Acharya + demo student + curriculum
-```
+   > It must be the **Session pooler** on port **5432**. GitHub runners and
+   > Vercel are IPv4-only; Supabase's direct connection is IPv6-only and will
+   > simply time out. The transaction pooler (6543) cannot run migrations.
 
-> The seed prints two demo logins. **Change both passwords immediately** —
-> or delete the demo student once you have real accounts.
+3. Put that string in **two** places, both in the browser:
+
+   **a. GitHub** → your repo → Settings → Secrets and variables → Actions →
+   **New repository secret** → name `DATABASE_URL`, paste the string.
+
+   **b. Vercel** → (after step 3 below) Project → Settings → Environment
+   Variables → `DATABASE_URL`, same string.
+
+4. Create the tables — **no terminal**: GitHub → **Actions** tab → **Database**
+   → **Run workflow** → tick **Also run the seed** (first time only) → Run.
+
+   Two minutes later the run turns green: 22 tables created, the Acharya and a
+   demo student exist. The log prints both passwords — **change them.**
 
 ## 3 · Vercel (~5 min)
 
