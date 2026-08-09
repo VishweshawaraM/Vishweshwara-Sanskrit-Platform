@@ -15,15 +15,27 @@ function say(line) {
   console.log(line);
   lines.push(line);
 }
-function flush() {
+function flush(asError = false) {
   const file = process.env.GITHUB_STEP_SUMMARY;
   if (file) appendFileSync(file, lines.join("\n") + "\n");
+
+  // Also emit as a workflow annotation. Annotations are retrievable through
+  // the API when raw logs and job summaries are not, which is what makes a
+  // remote failure diagnosable at all.
+  if (process.env.GITHUB_ACTIONS && asError) {
+    const encoded = lines
+      .join("\n")
+      .replace(/%/g, "%25")
+      .replace(/\r/g, "%0D")
+      .replace(/\n/g, "%0A");
+    console.log(`::error title=Database connection::${encoded}`);
+  }
 }
 
 const url = process.env.DATABASE_URL;
 if (!url) {
   say("**DATABASE_URL is not set.** Add it under Settings → Secrets and variables → Actions.");
-  flush();
+  flush(true);
   process.exit(1);
 }
 
@@ -38,7 +50,7 @@ try {
   say("percent-encoded: `@` → `%40`, `#` → `%23`, `/` → `%2F`, `:` → `%3A`.");
   say("Simplest fix: Supabase → Settings → Database → Reset database password,");
   say("choose one with only letters and digits, then update the secret.");
-  flush();
+  flush(true);
   process.exit(1);
 }
 
@@ -77,7 +89,7 @@ if (host.includes("pooler.supabase.com") && !username.includes(".")) {
 }
 
 if (fatal) {
-  flush();
+  flush(true);
   process.exit(1);
 }
 
@@ -121,6 +133,6 @@ try {
   } else {
     say("→ Unrecognised error. Send this message and it can be diagnosed.");
   }
-  flush();
+  flush(true);
   process.exit(1);
 }
