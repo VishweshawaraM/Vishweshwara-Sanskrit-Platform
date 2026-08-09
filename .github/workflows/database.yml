@@ -4,12 +4,24 @@ name: Database
 # runner. This exists so the Acharya never needs a terminal: set the
 # DATABASE_URL secret in the browser, then press "Run workflow".
 on:
+  # Runs when database-related code changes, so migrations can be applied
+  # without anyone pressing a button. Both steps are safe to repeat:
+  # drizzle records which migrations it has applied, and the seed stops if
+  # the Acharya's account already exists.
+  push:
+    branches: [main]
+    paths:
+      - "src/db/**"
+      - "scripts/db-check.mjs"
+      - "scripts/seed.ts"
+      - "drizzle.config.ts"
+      - ".github/workflows/database.yml"
   workflow_dispatch:
     inputs:
       seed:
-        description: "Also run the seed (first time only)"
+        description: "Also run the seed"
         type: boolean
-        default: false
+        default: true
 
 jobs:
   migrate:
@@ -52,7 +64,7 @@ jobs:
         run: npx drizzle-kit migrate
 
       - name: Seed
-        if: ${{ inputs.seed }}
+        if: ${{ github.event_name == 'push' || inputs.seed }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx tsx scripts/seed.ts
