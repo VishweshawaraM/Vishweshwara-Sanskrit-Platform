@@ -33,6 +33,23 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preloaded because both faces are used above the fold on every page. */}
+        <link
+          rel="preload"
+          href="/fonts/vishweshwara-serif-400.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/vishweshwara-devanagari-400.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );

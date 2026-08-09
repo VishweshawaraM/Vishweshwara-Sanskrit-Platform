@@ -1,8 +1,26 @@
-# Fonts — the Phase 0 open item
+# Fonts — RESOLVED (interim Devanagari)
 
 Typography is the single most likely cause of a blown performance budget on this
 project, and the single biggest determinant of whether the site reads as an
-institution. Both faces below are **placeholders** until licensing is settled.
+institution.
+
+## Current state
+
+| Role | Face | Status |
+|---|---|---|
+| Latin | **EB Garamond** | Shipped. A rigorous Garamond revival — passes the "already old" test (D-05). Full IAST coverage verified. |
+| Devanagari | **Noto Serif Devanagari** | Shipped, **interim**. All vedic marks verified present. |
+
+**Shobhika was chosen by the Acharya but could not be obtained.** The upstream
+repository (Sandhi-IITBombay/Shobhika) ships FontLab `.vfb` sources only — no
+built OTF — and building from `.vfb` requires proprietary software. CTAN and the
+CDNs are unreachable from the build environment.
+
+To swap it in: obtain `Shobhika-Regular.otf` and `Shobhika-Bold.otf`, place them
+in `assets/fonts/`, point the `devanagari` entries in `scripts/subset-fonts.mjs`
+at them, and run `npm run fonts`. Nothing else in the codebase changes.
+
+Shipped weight: **152.8 kB** across four faces, all subsetted and self-hosted.
 
 ## What is needed
 

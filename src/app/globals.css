@@ -1,6 +1,68 @@
 @import "tailwindcss";
 
 /* ==========================================================================
+   Fonts — self-hosted, subsetted. See FONTS.md and scripts/subset-fonts.mjs.
+
+   Latin:      EB Garamond — a rigorous Garamond revival. Full IAST coverage.
+   Devanagari: Noto Serif Devanagari — full vedic accent coverage, verified.
+               INTERIM. Shobhika is the intended face; no built binary was
+               obtainable. Swapping it is a one-line change in the subset script.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Vishweshwara Serif";
+  src: url("/fonts/vishweshwara-serif-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vishweshwara Serif";
+  src: url("/fonts/vishweshwara-serif-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vishweshwara Devanagari";
+  src: url("/fonts/vishweshwara-devanagari-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Vishweshwara Devanagari";
+  src: url("/fonts/vishweshwara-devanagari-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Metric-matched fallbacks. Overrides are taken from the real font's hhea
+   table so that swapping in the webfont causes no reflow — CLS stays at 0
+   even on a slow connection (docs/08 §4). */
+
+@font-face {
+  font-family: "Vishweshwara Serif Fallback";
+  src: local("Georgia"), local("Times New Roman"), local("Liberation Serif");
+  ascent-override: 100.7%;
+  descent-override: 29.8%;
+  line-gap-override: 0%;
+  size-adjust: 96%;
+}
+
+@font-face {
+  font-family: "Vishweshwara Devanagari Fallback";
+  src: local("Noto Sans Devanagari"), local("Nirmala UI"), local("Kohinoor Devanagari");
+  ascent-override: 105%;
+  descent-override: 35%;
+  line-gap-override: 0%;
+}
+
+/* ==========================================================================
    Vishweshwara Sanskrit — design tokens
    Ratified in docs/02-website-decisions.md (D-03, D-05).
 
@@ -54,14 +116,14 @@
   --color-danger:  #8a2b23;
 
   /* ---- Typography -------------------------------------------------------
-     Latin: a face already old, or a rigorous revival (D-05).
-     Devanagari: must carry vedic accents. See docs/12 §8 rule 5.
-     Both are placeholders until licensing is settled — see FONTS.md.
+     Latin: EB Garamond — a rigorous Garamond revival (D-05).
+     Devanagari: Noto Serif Devanagari — vedic accents verified present.
+     Faces are declared at the top of this file. See FONTS.md.
      ---------------------------------------------------------------------- */
-  --font-serif: "Vishweshwara Serif", "Iowan Old Style", "Palatino Linotype",
-                "Book Antiqua", Palatino, Georgia, serif;
-  --font-devanagari: "Vishweshwara Devanagari", "Noto Serif Devanagari",
-                     "Shobhika", serif;
+  --font-serif: "Vishweshwara Serif", "Vishweshwara Serif Fallback",
+                "Iowan Old Style", Palatino, Georgia, serif;
+  --font-devanagari: "Vishweshwara Devanagari", "Vishweshwara Devanagari Fallback",
+                     "Noto Serif Devanagari", serif;
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 
