@@ -199,9 +199,14 @@ Bulk CSV import for existing students. CSV export.
 session. At 50+ sessions a week, per-session creation risks Zoom rate limits and clutters the
 account.
 
-🔴 **RULING NEEDED** — E2: which Zoom plan do you hold? Server-to-Server OAuth and cloud
-recording require **Pro or above**. On Free, the platform cannot create meetings and you would
-paste links manually. This is a hard dependency.
+✅ **RESOLVED** — the Acharya holds **Zoom Workplace Pro**. Server-to-Server OAuth, cloud
+recording, and participant reports are all available. See doc 10 for the integration design.
+
+🔴 **NEW CONSTRAINT** — Pro includes only **10 GB of cloud recording storage**, which video fills
+in roughly one week at 50 sessions/week. Recordings must be offloaded to R2 automatically on the
+`recording.completed` webhook and deleted from Zoom cloud, making Zoom a transit buffer rather
+than a library. Recommended default: **audio-only for one-to-one, video for group sessions.**
+See doc 10 §3.
 
 - Attendance: pulled from Zoom participant reports where possible, always presented to the
   Acharya as **"review and confirm"** — Zoom name matching is unreliable.
@@ -336,7 +341,7 @@ discipline.*
 | # | Ruling needed | Blocks |
 |---|---|---|
 | 1 | Real student ceiling; which stages are taught in groups | Roadmap, your calendar |
-| 2 | Zoom plan (Pro+ required for automation) | M6 — hard dependency |
+| 2 | ~~Zoom plan~~ ✅ **RESOLVED — Workplace Pro.** New sub-ruling: record one-to-one sessions at all? And the approach to handwriting given Zoom's 3-whiteboard limit (doc 10) | M6 |
 | 3 | Section 2, R1–R8 — roles, minors, parent visibility | M3, M5 |
 | 4 | Advaita Vedānta curriculum | M1, M9 |
 | 5 | Stotras & Sūktas — separate path or Yajurveda I–III? | M1, M9 |
