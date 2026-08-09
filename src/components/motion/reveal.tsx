@@ -22,7 +22,7 @@ type RevealProps = {
   variant?: "fade" | "draw";
   as?: ElementType;
   className?: string;
-};
+} & Record<string, unknown>;
 
 export function Reveal({
   children,
@@ -30,6 +30,7 @@ export function Reveal({
   variant = "fade",
   as: Component = "div",
   className,
+  ...rest
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
@@ -75,14 +76,14 @@ export function Reveal({
   // fire. The outer element stays unclipped and observable.
   if (variant === "draw") {
     return (
-      <Component ref={ref} data-draw="" className={className} style={style}>
+      <Component ref={ref} data-draw="" className={className} style={style} {...rest}>
         <span className="draw-inner">{children}</span>
       </Component>
     );
   }
 
   return (
-    <Component ref={ref} data-reveal="" className={className} style={style}>
+    <Component ref={ref} data-reveal="" className={className} style={style} {...rest}>
       {children}
     </Component>
   );
