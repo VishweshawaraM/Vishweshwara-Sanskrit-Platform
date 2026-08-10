@@ -1,10 +1,18 @@
 import { asc, eq } from "drizzle-orm";
 
+import { decideApplication } from "@/app/actions/teaching";
+import { AdmitForm } from "@/components/acharya/admit-form";
 import { db } from "@/db";
-import { application } from "@/db/schema";
+import { application, path } from "@/db/schema";
 import { ACHARYA_TIMEZONE, formatInZone } from "@/lib/time";
 
 export default async function ApplicationsPage() {
+  const paths = await db()
+    .select({ id: path.id, name: path.nameLatin })
+    .from(path)
+    .where(eq(path.isPublished, true))
+    .orderBy(asc(path.sortOrder));
+
   const rows = await db()
     .select()
     .from(application)
@@ -40,6 +48,26 @@ export default async function ApplicationsPage() {
                 Prior study: {a.priorStudy}
               </p>
             ) : null}
+
+            <AdmitForm applicationId={a.id} paths={paths} />
+
+            <form action={decideApplication} className="mt-3 flex gap-4">
+              <input type="hidden" name="applicationId" value={a.id} />
+              <button
+                name="decision"
+                value="waitlisted"
+                className="text-muted hover:text-heading cursor-pointer text-sm underline underline-offset-4"
+              >
+                Waitlist
+              </button>
+              <button
+                name="decision"
+                value="declined"
+                className="text-muted hover:text-heading cursor-pointer text-sm underline underline-offset-4"
+              >
+                Decline, with thanks
+              </button>
+            </form>
           </li>
         ))}
       </ul>

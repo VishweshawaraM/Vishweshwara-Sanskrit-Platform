@@ -1,8 +1,9 @@
 import { asc, eq } from "drizzle-orm";
 import Link from "next/link";
 
+import { AddStudentForm } from "@/components/acharya/add-student-form";
 import { db } from "@/db";
-import { person } from "@/db/schema";
+import { path, person } from "@/db/schema";
 
 export default async function StudentsPage() {
   const students = await db()
@@ -18,11 +19,24 @@ export default async function StudentsPage() {
     .where(eq(person.role, "student"))
     .orderBy(asc(person.nameLatin));
 
+  const paths = await db()
+    .select({ id: path.id, name: path.nameLatin })
+    .from(path)
+    .where(eq(path.isPublished, true))
+    .orderBy(asc(path.sortOrder));
+
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-3xl">Students</h1>
-        <p className="text-muted mt-2">{students.length} on the rolls.</p>
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl">Students</h1>
+          <p className="text-muted mt-2">
+            {students.length === 0
+              ? "No students yet. Add your first below."
+              : `${students.length} on the rolls.`}
+          </p>
+        </div>
+        <AddStudentForm paths={paths} />
       </header>
 
       <ul className="space-y-2">

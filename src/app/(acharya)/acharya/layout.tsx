@@ -27,6 +27,7 @@ export default async function AcharyaLayout({
             <Link href="/acharya/review" className="text-muted hover:text-heading no-underline">Review</Link>
             <Link href="/acharya/students" className="text-muted hover:text-heading no-underline">Students</Link>
             <Link href="/acharya/applications" className="text-muted hover:text-heading no-underline">Applications</Link>
+            <Link href="/account" className="text-muted hover:text-heading no-underline">Account</Link>
             <form action={logout}>
               <button className="text-muted hover:text-heading cursor-pointer text-sm">Sign out</button>
             </form>

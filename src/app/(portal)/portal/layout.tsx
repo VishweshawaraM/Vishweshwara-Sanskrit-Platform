@@ -36,6 +36,7 @@ export default async function PortalLayout({
             <Link href="/portal/progress" className="text-ink-muted hover:text-ink-fg no-underline">
               Progress
             </Link>
+            <Link href="/account" className="text-ink-muted hover:text-ink-fg no-underline">Account</Link>
             <form action={logout}>
               <button className="text-ink-muted hover:text-ink-fg cursor-pointer text-sm">
                 Sign out
